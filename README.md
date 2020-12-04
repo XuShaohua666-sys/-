@@ -1,13 +1,27 @@
 # vue_shop
 
-## Project setup
+## 开发模式
 ```
-yarn install
+电商后台管理系统整体采用前后端分离的开发模式，其中前端项目是基于 Vue 技术栈的 SPA 项目。
 ```
 
-### Compiles and hot-reloads for development
+## 技术选型
 ```
-yarn serve
+    ⭕ 前端项目技术栈
+
+        🔸 Vue
+        🔸 Vue-router
+        🔸 Element-UI
+        🔸 Axios
+        🔸 Echarts(绘制图像报表)
+        
+   ⭕ 后端项目技术栈
+
+        🔸 Node.js
+        🔸 Express
+        🔸 Jwt(状态保持工具)
+        🔸 Mysql
+        🔸 Sequelize  
 ```
 
 ### Compiles and minifies for production
