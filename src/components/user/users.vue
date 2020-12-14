@@ -115,7 +115,7 @@
                   status-icon
                 >
                   <el-form-item label="用户名">
-                    <el-input :value="scope.row.username" disabled></el-input>
+                    <el-input v-model="upDataUser.username" disabled></el-input>
                   </el-form-item>
                   <el-form-item label="邮箱" prop="email">
                     <el-input v-model="upDataUser.email"></el-input>
@@ -151,9 +151,45 @@
                   type="warning"
                   icon="el-icon-setting"
                   size="mini"
+                  @click="setRole(scope.row)"
                 ></el-button>
               </el-tooltip>
             </el-button-group>
+            <!--分配角色对话框 -->
+            <el-dialog
+              title="分配角色"
+              :visible.sync="setRoleDialog"
+              width="50%"
+              @close="setRoleDialogClosed"
+            >
+              <p>
+                当前用户:<el-input
+                  v-model="setRoles.username"
+                  disabled
+                ></el-input>
+              </p>
+              <p>
+                当前用户:<el-input v-model="setRoles.role" disabled></el-input>
+              </p>
+              <p>
+                分配新角色:
+                <template>
+                  <el-select v-model="nowRoleId" placeholder="请选择">
+                    <el-option
+                      v-for="item in rolesList"
+                      :key="item.id"
+                      :label="item.roleName"
+                      :value="item.id"
+                    >
+                    </el-option>
+                  </el-select>
+                </template>
+              </p>
+              <span slot="footer" class="dialog-footer">
+                <el-button @click="setRoleDialog = false">取 消</el-button>
+                <el-button type="primary" @click="setRoleSure">确 定</el-button>
+              </span>
+            </el-dialog>
           </template>
         </el-table-column>
       </el-table>
@@ -210,6 +246,8 @@ export default {
       dialogVisible: false,
       // 控制修改用户对话框的显示与隐藏
       upDataDialog: false,
+      // 控制分配角色对话框的显示与隐藏
+      setRoleDialog: false,
       /* 添加用户表单 */
       addUser: {
         username: '',
@@ -220,9 +258,20 @@ export default {
       /* 修改用户表单 */
       upDataUser: {
         id: '',
+        username: '',
         email: '',
         mobile: '',
       },
+      // 分配角色存储当前id,用户名，和角色
+      setRoles: {
+        id: '',
+        username: '',
+        role: '',
+      },
+      // 存储角色列表
+      rolesList: {},
+      // 与分配角色下拉列表 绑定
+      nowRoleId: '',
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -326,8 +375,8 @@ export default {
     // 点击修改按钮
     showUpDataDialog(res) {
       this.upDataDialog = true
-
       this.upDataUser.id = res.id
+      this.upDataUser.username = res.username
       this.upDataUser.email = res.email
       this.upDataUser.mobile = res.mobile
     },
@@ -387,6 +436,46 @@ export default {
             message: '已取消删除',
           })
         })
+    },
+    // 点击分配角色按钮 处理函数
+    async setRole(role) {
+      this.setRoles.id = role.id
+      this.setRoles.username = role.username
+      this.setRoles.role = role.role_name
+
+      //获取角色列表
+      const { data: res } = await this.$http.get('roles')
+      if (res.meta.status !== 200) {
+        return this.$message.error(res.meta.msg)
+      } else {
+        this.rolesList = res.data
+        this.setRoleDialog = true
+      }
+    },
+    // 点击分配角色对话框确定按钮，处理函数
+    async setRoleSure() {
+      if (!this.nowRoleId) {
+        return this.$message.error('请选择要分配的角色')
+      } else {
+        const { data: res } = await this.$http.put(
+          `users/${this.setRoles.id}/role`,
+          {
+            rid: this.nowRoleId,
+          }
+        )
+        if (res.meta.status !== 200) {
+          return this.$message.error(res.meta.msg)
+        } else {
+          this.$message.success(res.meta.msg)
+          this.getUserList()
+          this.setRoleDialog = false
+        }
+      }
+    },
+    // 分配角色对话框 关闭事件处理函数
+    setRoleDialogClosed() {
+      // 将存储下拉列表存储的id 置空
+      this.nowRoleId = ''
     },
   },
 }

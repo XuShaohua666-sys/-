@@ -4,6 +4,7 @@ html,body,#app{
     height: 100%;
     margin: 0;
     padding: 0;
+    min-width: 1366px;
 }
 .icon {
     width: 1em;
@@ -14,7 +15,7 @@ html,body,#app{
   }
 .el-breadcrumb {
     margin-bottom: 15px;
-    font-size: 10px;
+    font-size: 14px;
     
 }
 .el-breadcrumb__item i{
