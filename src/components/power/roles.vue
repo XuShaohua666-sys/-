@@ -106,7 +106,7 @@
               @click="deleteRoles(scope.row.id)"
               >删除</el-button
             >
-            <!--分配角色按钮 -->
+            <!--分配权限按钮 -->
             <el-button
               type="warning"
               icon="el-icon-setting"
@@ -160,7 +160,7 @@
                 <el-button @click="setRightDialogVisible = false"
                   >取 消</el-button
                 >
-                <el-button type="primary" @click="allotRights(scope.row.id)"
+                <el-button type="primary" @click="allotRights"
                   >确 定</el-button
                 >
               </div>
@@ -233,17 +233,17 @@ export default {
     this.getRolesList()
   },
   methods: {
-    // 获取权限列表
+    // 获取角色列表
     async getRolesList() {
       const { data: res } = await this.$http.get('roles')
       if (res.meta.status !== 200) return
       this.rolesList = res.data
     },
-    // 添加用户对话框关闭 处理函数
+    // 添加角色对话框关闭 处理函数
     addRolesClose() {
       this.$refs.addRolesFrom.resetFields()
     },
-    // 添加用户确定按钮 处理函数
+    // 添加角色确定按钮 处理函数
     async addRolesSure() {
       this.$refs.addRolesFrom.validate(async (valid) => {
         if (!valid) {
@@ -362,7 +362,7 @@ export default {
         this.setRightDialogVisible = true
       }
     },
-    // 通过递归的形式，获取角色小所有三级权限的id,并保存到defKeys数组中
+    // 通过递归的形式，获取角色所有三级权限的id,并保存到defKeys数组中
     getLeafKeys(node, arr) {
       // 如果当前节点没有children属性，即为三级权限
       if (!node.children) {
