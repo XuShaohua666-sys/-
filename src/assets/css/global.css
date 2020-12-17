@@ -43,3 +43,6 @@ html,body,#app{
 .ql-editor{
     min-height: 300px;
 }
+.el-dialog{
+    margin: 0 auto;
+}

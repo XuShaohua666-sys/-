@@ -95,8 +95,7 @@
           </el-tab-pane>
           <el-tab-pane label="商品图片" name="3">
             <!--action表示图片要上传到的后台api地址  list-type表示文件类型 
-            auto-upload表示是否在选取文件后立即进行上传  headers表示设置上传的请求头部
-            on-success文件上传成功时的钩子-->
+              headers表示设置上传的请求头部 on-success文件上传成功时的钩子-->
             <el-upload
               action="http://127.0.0.1:8888/api/private/v1/upload"
               list-type="picture-card"
