@@ -9,6 +9,7 @@ import roles from '../components/power/roles.vue'
 import goods_list from '../components/goods/list.vue'
 import add from '../components/goods/add.vue'
 import order from '../components/order/order.vue'
+import report from '../components/report/report.vue'
 // 初始化插件
 Vue.use(VueRouter)
 
@@ -51,6 +52,10 @@ const routes = [{
       {
         path: '/orders',
         component: order
+      },
+      {
+        path:'/reports',
+        component:report
       }
     ]
   },
