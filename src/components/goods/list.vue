@@ -58,6 +58,36 @@
               size="mini"
               @click="showUpData(scope.row)"
             ></el-button>
+            <!--编辑对话框 -->
+            <el-dialog
+              title="编辑商品"
+              :visible.sync="UpDataRolesDiaolog"
+            >
+              <el-form
+                :model="UpDataGoods"
+                :rules="rules"
+                ref="upDataGoodsFrom"
+              >
+                <el-form-item label="商品名称" prop="goods_name">
+                  <el-input v-model="UpDataGoods.goods_name"></el-input>
+                </el-form-item>
+                <el-form-item label="价格" prop="goods_price">
+                  <el-input v-model="UpDataGoods.goods_price"></el-input>
+                </el-form-item>
+                <el-form-item label="数量" prop="goods_name">
+                  <el-input v-model="UpDataGoods.goods_number"></el-input>
+                </el-form-item>
+                <el-form-item label="重量" prop="goods_name">
+                  <el-input v-model="UpDataGoods.goods_weight"></el-input>
+                </el-form-item>
+              </el-form>
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="UpDataRolesDiaolog = false">取 消</el-button>
+                <el-button type="primary" @click="UpDataGoodsSure"
+                  >确 定</el-button
+                >
+              </div>
+            </el-dialog>
 
             <!--删除按钮 -->
             <el-button
@@ -100,6 +130,28 @@ export default {
       goodsList: [],
       // 存储数据总数
       total: 0,
+      UpDataRolesDiaolog:false,
+      UpDataGoodsId :'',
+      UpDataGoods:{
+        goods_name:'',
+        goods_price:null,
+        goods_number:null,
+        goods_weight:null,
+      },
+      rules:{
+        goods_name:[
+          { required: true, message: '请输入商品名称', trigger: 'blur' },
+        ],
+        goods_price:[
+          { required: true, message: '请输入商品价格', trigger: 'blur' },
+        ],
+        goods_number:[
+          { required: true, message: '请输入商品数量', trigger: 'blur' },
+        ],
+        goods_number:[
+          { required: true, message: '请输入商品重量', trigger: 'blur' },
+        ]
+      }
     }
   },
   created() {
@@ -127,6 +179,38 @@ export default {
     handleCurrentChange(newNum) {
       this.queryInfo.pagenum = newNum
       this.getGoodsList()
+    },
+    /* 编辑商品 */
+    showUpData(row){
+      
+      this.UpDataRolesDiaolog = true
+      this.UpDataGoodsId = row.goods_id
+      this.UpDataGoods.goods_name = row.goods_name
+      this.UpDataGoods.goods_price  = row.goods_price
+      this.UpDataGoods.goods_number = row.goods_number
+      this.UpDataGoods.goods_weight = row.goods_weight
+    },
+    /* 提交编辑商品对话框 */
+    UpDataGoodsSure(){
+      console.log(this.UpDataGoodsId);
+      this.$refs.upDataGoodsFrom.validate(async (valid) => {
+        if (!valid) {
+          return
+        } else {
+          const {data:res} = await this.$http.put(
+            'goods/' + this.UpDataGoodsId,
+            this.UpDataGoods
+          )
+          if (res.meta.status !== 200) {
+            return this.$message.error(res.meta.msg)
+          } else {
+            this.$message.success('编辑商品成功')
+            this.getGoodsList()
+            this.UpDataRolesDiaolog = false
+          }
+        }
+        })
+      
     },
     // 删除商品按钮点击 处理函数
     deleteGoods(id) {

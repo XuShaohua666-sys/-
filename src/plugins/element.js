@@ -41,7 +41,9 @@ import {
   Cascader,
   CheckboxGroup,
   Checkbox,
-  Upload
+  Upload,
+  Image
+  
 } from 'element-ui'
 
 
@@ -84,5 +86,7 @@ Vue.use(Checkbox)
 Vue.use(Upload)
 Vue.use(Timeline)
 Vue.use(TimelineItem)
+Vue.use(Image)
+
 Vue.prototype.$message = Message
 Vue.prototype.$confirm= MessageBox.confirm

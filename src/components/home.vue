@@ -11,31 +11,38 @@
     <!--页面主体区域-->
     <el-container>
       <!--侧边栏-->
-      <el-aside :width="flag ? '64px' : '200px' ">
+      <el-aside :width="flag ? '64px' : '200px'">
         <!--侧边栏菜单区域-->
         <div class="toggle-button" @click="toggleCollapse">|||</div>
         <el-menu
           background-color="#333744"
           text-color="#fff"
           active-text-color="#409EFF"
-          :default-active='path'
-          unique-opened
-          :collapse='flag'
-          :collapse-transition='false'
-          :router='true'
+          :default-active="path"
+          :collapse="flag"
+          :default-openeds="['/users','/rights','/goods','/orders','/reports']"
+          :collapse-transition="false"
+          :router="true"
         >
           <!--一级菜单区域-->
-          <el-submenu :index="'/' + item.path" v-for="item in menuList" :key="item.id">
+          <el-submenu
+            :index="'/' + item.path"
+            v-for="item in menuList"
+            :key="item.id"
+          >
             <template slot="title">
-              <i :class="iconsObj[item.id]" style="margin-right:10px" ></i>
-              <span>{{item.authName}}</span>
+              <i :class="iconsObj[item.id]" style="margin-right: 10px"></i>
+              <span>{{ item.authName }}</span>
             </template>
             <!--二级菜单区域-->
-            <el-menu-item :index="'/' + children.path" v-for="children in item.children" :key="children.id"
+            <el-menu-item
+              :index="'/' + children.path"
+              v-for="children in item.children"
+              :key="children.id"
             >
               <template slot="title">
                 <i class="el-icon-menu"></i>
-                <span>{{children.authName}}</span>
+                <span>{{ children.authName }}</span>
               </template>
             </el-menu-item>
           </el-submenu>
@@ -43,8 +50,8 @@
       </el-aside>
       <!--右侧内容-->
       <el-main>
-       <!--路由占位符，展示子组件-->
-      <router-view></router-view>
+        <!--路由占位符，展示子组件-->
+        <router-view></router-view>
       </el-main>
     </el-container>
   </el-container>
@@ -56,16 +63,16 @@ export default {
     return {
       // 左侧菜单栏数据
       menuList: [],
-      iconsObj:{
-        125:'iconfont icon-users',
-        103:'iconfont icon-tijikongjian',
-        101:'iconfont icon-shangpin',
-        102:'iconfont icon-danju',
-        145:'iconfont icon-baobiao'
+      iconsObj: {
+        125: 'iconfont icon-users',
+        103: 'iconfont icon-tijikongjian',
+        101: 'iconfont icon-shangpin',
+        102: 'iconfont icon-danju',
+        145: 'iconfont icon-baobiao',
       },
       // 控制菜单栏折叠与展开
-      flag:false,
-      path:this.$route.path
+      flag: false,
+      path: this.$route.path,
     }
   },
   // 生命周期函数，在实例创建完成后被立即调用
@@ -91,7 +98,7 @@ export default {
       console.log(res)
     },
 
-    toggleCollapse(){
+    toggleCollapse() {
       this.flag = !this.flag
     }
   },
@@ -125,7 +132,7 @@ export default {
 }
 .el-aside {
   background-color: #333744;
-  .el-menu{
+  .el-menu {
     border-right: none;
   }
 }
@@ -133,7 +140,7 @@ export default {
 .el-main {
   background-color: #eaedf1;
 }
-.toggle-button{
+.toggle-button {
   background-color: #345064;
   color: #ffffff;
   text-align: center;

@@ -15,13 +15,31 @@ import 'quill/dist/quill.bubble.css' // for bubble theme
 import './assets/css/global.css'
 import axios from 'axios'
 
+
+// tree-table
+import TreeTable from 'vue-table-with-tree-grid'
+Vue.component('tree-table', TreeTable)
+// 导入进度条包对应的js和css
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 // 配置请求的根路径
 axios.defaults.baseURL=`http://127.0.0.1:8888/api/private/v1/`
 // 请求拦截器，在请求头中加入token
 axios.interceptors.request.use(config => {
   config.headers.Authorization = sessionStorage.getItem('token');
+  // 在请求拦截器中展示进度条
+  NProgress.start();
   return config;
 })
+// 响应拦截器
+axios.interceptors.response.use(response => {
+    // 在响应拦截器中隐藏进度条
+    NProgress.done();  
+return response;
+},error => {
+// Do something with response error
+return Promise.reject(error);
+});
 // 将axios方法直接绑定到原型上面，然后直接通过this.$http就可以使用了
 Vue.prototype.$http = axios
 
